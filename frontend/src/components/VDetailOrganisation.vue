@@ -5,7 +5,7 @@
         {{ result.name }}
       </h4>
 
-    <div v-if="!result.locations.length" class="card mt-2">
+    <div v-if="!result.locations.length && !result.managers.length && !result.employees.length && !result.associated.length" class="card mt-2">
       <div class="card-body">
         <b-list-group-item class="bg-light">
           {{ $t('no_info_available') }}
