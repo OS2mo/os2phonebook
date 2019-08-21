@@ -51,8 +51,10 @@ then
     #Get SOLR
     wget http://dk.mirrors.quenda.co/apache/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz
 
+    SHA_URL=https://www.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz.sha512
+
     # Verify SOLR download
-    if sha512sum --status -c docs/solr.sha1 
+    if curl $SHA_URL | sha512sum --status -c
     then 
         echo 'SOLR download OK'
     else 
