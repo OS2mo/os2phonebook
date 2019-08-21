@@ -6,7 +6,7 @@ cd $(dirname $0)
 
 
     #Get SOLR
-    wget http://dk.mirrors.quenda.co/apache/lucene/solr/7.7.1/solr-7.7.1.tgz
+    wget http://dk.mirrors.quenda.co/apache/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz
 
     # Verify SOLR download
     if sha512sum --status -c docs/solr.sha1 
@@ -17,9 +17,9 @@ cd $(dirname $0)
         exit 1
     fi
 
-    tar xzf solr-7.7.1.tgz solr-7.7.1/bin/install_solr_service.sh --strip-components=2
+    tar xzf solr-${SOLR_VERSION}.tgz solr-${SOLR_VERSION}/bin/install_solr_service.sh --strip-components=2
     sed -i -e "/status/d" ./install_solr_service.sh
-    bash ./install_solr_service.sh solr-7.7.1.tgz
+    bash ./install_solr_service.sh solr-${SOLR_VERSION}.tgz
 
     sudo -u solr /opt/solr/bin/solr create -c departments -s 2 -rf 2
     sudo -u solr /opt/solr/bin/solr create -c employees -s 2 -rf 2
