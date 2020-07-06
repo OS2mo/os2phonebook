@@ -28,7 +28,3 @@ coverage.xml
 # System Files
 .DS_Store
 Thumbs.db
-
-# SQL Dumps
-kolding.sql
-dummy.sql
