@@ -37,14 +37,14 @@ services:
             context: .
             dockerfile: docker/Dockerfile.frontend
         ports:
-            - 4200:4200
+            - 4200:80
 
     os2phonebook-backend:
         build:
             context: .
             dockerfile: docker/Dockerfile.backend
         ports:
-            - 9090:9090
+            - 9090:80
         environment:
             OS2PHONEBOOK_COMPANY_NAME: Magenta ApS
             OS2PHONEBOOK_DATALOADER_PASSWORD: password1

@@ -9,10 +9,6 @@ COPY os2phonebook_frontend/package.json /app/package.json
 COPY os2phonebook_frontend/package-lock.json /app/package-lock.json
 RUN npm install
 
-# Create service account / uid and gid
-RUN groupadd -g 72085 -r sys_magenta_os2phonebook
-RUN useradd -u 72085 --no-log-init -r -g sys_magenta_os2phonebook sys_magenta_os2phonebook
-
 # Copy in source
 COPY os2phonebook_frontend/ /app
 

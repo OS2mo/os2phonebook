@@ -1,8 +1,4 @@
-FROM python:3-slim
-
-# Force the stdout and stderr streams from python to be unbuffered. See
-# https://docs.python.org/3/using/cmdline.html#cmdoption-u
-ENV PYTHONUNBUFFERED=1
+FROM tiangolo/meinheld-gunicorn-flask:python3.8-alpine3.11
 
 # Default configuration (should be overridden)
 ENV OS2PHONEBOOK_COMPANY_NAME=Magenta
@@ -15,32 +11,10 @@ WORKDIR /app
 
 # Install requirements
 COPY os2phonebook_backend/requirements /app/requirements
-RUN pip install -r /app/requirements/release.txt
-
-RUN apt-get update && apt-get install --no-install-recommends -y sudo=1.8.27-1+deb10u2 \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Create service account / uid and gid
-RUN groupadd -g 72085 -r sys_magenta_os2phonebook
-RUN useradd -u 72085 --no-log-init -r -g sys_magenta_os2phonebook sys_magenta_os2phonebook
-
-# Entrypoint
-COPY docker/entrypoint.sh /entrypoint/os2phonebook-entrypoint.sh
-
-RUN chown -R sys_magenta_os2phonebook:sys_magenta_os2phonebook /entrypoint
+RUN pip install --no-cache-dir -r /app/requirements/release.txt
 
 # Copy in source
+COPY os2phonebook_backend/preflight.sh /app/prestart.sh
 COPY os2phonebook_backend/cli.py /app/cli.py
-COPY os2phonebook_backend/wsgi.py /app/wsgi.py
+COPY os2phonebook_backend/wsgi.py /app/main.py
 COPY os2phonebook_backend/os2phonebook /app/os2phonebook
-
-RUN chown -R sys_magenta_os2phonebook:sys_magenta_os2phonebook /app
-
-# Setup entrypoint and such
-WORKDIR /app
-
-EXPOSE 9090
-
-ENTRYPOINT ["sh", "/entrypoint/os2phonebook-entrypoint.sh"]
-
-CMD ["gunicorn", "-b", "0.0.0.0:9090", "--worker-class=gevent", "--reload", "--worker-connections=1000", "wsgi:app"]

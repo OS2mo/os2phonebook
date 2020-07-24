@@ -37,7 +37,7 @@ stages:
 .lint-default:
   stage: lint
   needs: []
-  image: python:3.7
+  image: python:3-alpine
   services: []
   tags:
     - docker
